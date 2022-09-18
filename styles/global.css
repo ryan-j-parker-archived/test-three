@@ -11,6 +11,12 @@ body {
     grid-template-rows: auto 1fr;
 }
 
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
 header {
     position: sticky;
     top: 0;
@@ -33,7 +39,7 @@ main {
     padding: 20px;
 }
 
-.main-body {
+/* .main-body {
     background: url('../assets/stars.jpg') no-repeat center center fixed;
     background-size: cover;
-}
+} */

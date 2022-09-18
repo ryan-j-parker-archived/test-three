@@ -13,14 +13,14 @@
 
     <!-- js -->
     <!-- <script src="./three.min.js"></script> -->
-    <script type="module" src="app.js"></script>
+
 
     <!-- fonts -->
     <!-- see https://fonts.google.com/ -->
 
     <!-- css -->
-    <link rel="stylesheet" href="styles/reset.css" />
-    <link rel="stylesheet" href="styles/global.css" />
+    <!-- <link rel="stylesheet" href="styles/reset.css" /> -->
+    <link rel="stylesheet" href="./styles/global.css" />
     <!-- add link for page specific css -->
 
 </head>
@@ -30,11 +30,26 @@
         <img class="logo" src="assets/html_css_js.png" alt="logo">
         <h1>Web App</h1>
     </header>
+    <canvas id="bg"></canvas>
+    <!-- <script type="module">
+        import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+        import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js';
+        import { GLTFLoader } from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/GLTFLoader.js';
+    </script> -->
+    <script type="importmap">
+            {
+                "imports": {
+                    "three": "https://unpkg.com/three@0.139.2/build/three.module.js"
+                }
+            }
+        </script>
+    <script type="module" src="app.js"></script>
+
 
     <main class="main-body">
 
 
-        <canvas id="bg"></canvas>
+
 
     </main>
 
