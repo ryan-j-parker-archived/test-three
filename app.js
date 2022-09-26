@@ -127,20 +127,8 @@ const cloudMapTrans = textureLoader.load('./assets/planets/earthcloudmaptrans.jp
 
 const shinyTexture = textureLoader.load('./assets/shiny.png');
 
-const marble = new THREE.Mesh(
-    new THREE.SphereGeometry(2, 100, 100),
-    new THREE.MeshMatcapMaterial({
-        matcap: shinyTexture,
-        metalness: 0.45,
-        roughness: 0.45,
-    }),
-);
-marble.position.set(0, 6, -24);
-scene.add(marble);
 
 scene.background = textureLoader.load('../assets/few-stars.jpg');
-
-
 
 // IN PROGRESS
 
@@ -174,12 +162,14 @@ scene.background = textureLoader.load('../assets/few-stars.jpg');
 
 // IN PROGRESS
 
-const waterGeo = new THREE.PlaneGeometry(30, 30, 60, 60);
+const waterGeo = new THREE.PlaneGeometry(100, 100, 100, 100);
 const waterMesh = new THREE.MeshStandardMaterial({
     // color: 0xccddff,
+    // color: 0x00ccff,
     map: waterColor,
     normalMap: waterNormal,
     displacementMap: waterDisp,
+    displacementScale: 5,
     specularMap: waterSpec,
     aoMap: waterOcc,
     side: THREE.DoubleSide,
@@ -192,16 +182,16 @@ scene.add(water);
 
 
 const bulbGeometry = new THREE.SphereGeometry(0, 16, 8);
-const bulbLight = new THREE.PointLight(0xffee88, 4, 200, 20);
+const bulbLight = new THREE.PointLight(0xffee88, 7, 200, 20);
 const bulbMat = new THREE.MeshStandardMaterial({
     emissive: 0xffffee,
-    emissiveIntensity: 1,
+    emissiveIntensity: 4,
     color: 0x000000,
 });
 bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
 bulbLight.position.set(0, 2, 0);
-// bulbLight.castShadow = true;
-bulbLight.castShadow = false;
+bulbLight.castShadow = true;
+// bulbLight.castShadow = false;
 scene.add(bulbLight);
 
 // const bulbGeometry2 = new THREE.SphereGeometry(0, 16, 8);
@@ -336,12 +326,12 @@ const newMesh = new THREE.Mesh(newGeo, newMat);
 scene.add(newMesh);
 
 const earth = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 40, 40),
-    new THREE.MeshStandardMaterial({
+    new THREE.SphereGeometry(1, 100, 100),
+    new THREE.MeshPhysicalMaterial({
         map: earthDay,
         normalMap: earthMap,
-        displacementMap: earthBump,
-        displacementScale: 0.05,
+        // displacementMap: earthBump,
+        displacementScale: 0.003,
         // shadowMap: earthNight,
         specularMap: earthSpec,
         // clearcoat: 1,
@@ -351,23 +341,23 @@ const earth = new THREE.Mesh(
     }),
 );
 earth.rotateY(0.234);
-earth.rotateX(0.014);
-earth.rotateZ(0.03);
-earth.position.x = 0,
-    earth.position.y = 9,
-    earth.position.z = 19,
-    scene.add(earth);
+// earth.rotateX(0.014);
+// earth.rotateZ(0.03);
+// earth.position.x = 0,
+//     earth.position.y = 9,
+//     earth.position.z = 9,
+    // scene.add(earth);
 // earth.rotateY(23.5 * Math.PI / 180);
 
 
 const earthClouds = new THREE.Mesh(
-        new THREE.SphereGeometry(1.005, 40, 40),
-        new THREE.MeshPhongMaterial({
+        new THREE.SphereGeometry(1.005, 100, 100),
+        new THREE.MeshStandardMaterial({
             map: clouds,
             // normalMap: cloudMapTrans,
             transparent: true,
             color: 0xffffff,
-            opacity: .55,
+            opacity: 0.55,
             normalMap: earthDay,
         }),
     );
@@ -380,7 +370,7 @@ const moon = new THREE.Mesh(
         reflectivity: 0.5,
     })
 );
-moon.position.x = 3.84;
+moon.position.x = 2.84;
 
 earth.add(earthClouds, moon);
 
@@ -396,10 +386,40 @@ const mercury = new THREE.Mesh(
 );
 mercury.position.x = 3;
 
+const venus = new THREE.Mesh(
+    new THREE.SphereGeometry(0.95, 100, 100),
+    new THREE.MeshPhongMaterial({
+        map: venusSurfaceTexture,
+        metalness: 0.45,
+        roughness: 0.45,
+    }),
+);
+venus.position.x = 4;
+// scene.add(venus);
+
+const venusClouds = new THREE.Mesh(
+    new THREE.SphereGeometry(1.01, 100, 100),
+    new THREE.MeshStandardMaterial({
+        map: venusAtmoTexture,
+        transparent: true,
+        opacity: 0.2,
+    }),
+);
+
+venus.add(venusClouds);
+
+const mars = new THREE.Mesh(
+    new THREE.SphereGeometry(0.75, 64, 64),
+    new THREE.MeshStandardMaterial({
+        map: marsTexture,
+        // normalMap: moonTexture,
+    }),
+);
+mars.position.x = 3;
 
 
 const sun = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 40, 40),
+    new THREE.SphereGeometry(2, 40, 40),
     new THREE.MeshLambertMaterial({
         map: sunTexture,
         clearcoat: 1,
@@ -409,7 +429,7 @@ const sun = new THREE.Mesh(
         // emissive: 0xffffff,
     }),
 );
-sun.add(mercury);
+sun.add(earth, mercury, venus, mars);
 scene.add(sun);
 
 
@@ -434,10 +454,10 @@ const tick = () => {
     // torus.rotation.y -= .04;
     // sphere.rotation.y = elapsedTime * Math.PI * 2;
 
-    // earth.position.z = Math.sin(elapsedTime * 0.5) * 9;
-    // earth.position.x = Math.cos(elapsedTime * 0.5) * 9;
+    earth.position.z = Math.sin(elapsedTime * 0.5) * 15;
+    earth.position.x = Math.cos(elapsedTime * 0.5) * 15;
     // earth.position.z = 5;
-    // earth.rotation.y += 0.0365;
+    earth.rotation.y += 0.0365;
     // moon.rotation.y += Math.PI * 0.0365;
 
     earthClouds.rotation.z += 0.0008;
@@ -445,14 +465,24 @@ const tick = () => {
     // earthClouds.rotation.x += .0002;
     // earthClouds.rotation.y -= .0004;
 
-    mercury.position.z = Math.sin(elapsedTime * 2) * 3.5;
-    mercury.position.x = Math.cos(elapsedTime * 2) * 3.5;
+    mercury.position.z = Math.sin(elapsedTime * 0.2) * 5;
+    mercury.position.x = Math.cos(elapsedTime * 0.2) * 5;
 
     mercury.rotation.y += 0.08;
 
-    // moon.position.x = Math.sin(elapsedTime * -0.2) * 3.5;
-    // moon.position.z = Math.cos(elapsedTime * -0.5) * 3.5;
-    moon.rotation.x = elapsedTime * -0.0365;
+    venus.position.z = Math.sin(-elapsedTime * 0.001) * 9;
+    venus.position.x = Math.cos(-elapsedTime * 0.001) * 9;
+
+    venus.rotation.y += 0.034;
+    venusClouds.rotation.y += 0.084;
+
+    mars.position.z = Math.sin(-(elapsedTime) * 0.02) * 22;
+    mars.position.x = Math.cos(-(elapsedTime) * 0.02) * 22;
+    
+    mars.rotation.y += 0.06;
+    // moon.position.x = Math.sin(elapsedTime * 2) * 3.5;
+    // moon.position.z = Math.cos(elapsedTime * 5) * 3.5;
+    moon.rotation.y = elapsedTime * 0.5;
     sun.rotation.y += 0.02;
 
     // SUN LEAPS OUT AT YOU!!
@@ -471,13 +501,6 @@ material.roughness = 0.2;
 // material.wireframe = true;
 // material.color = 0xffaacc;
 
-const globe = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 64, 64),
-    material,
-);
-globe.position.set(1.5, 5, 15);
-
-scene.add(globe);
 
 
 
