@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import * as THREE from 'three';
 // import '../styles/global.css';
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+// import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { OrbitControls } from './jsm/controls/OrbitControls.js';
 // import gsap from './minified/gsap.min.js';
 
@@ -39,8 +39,8 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000,
 );
-camera.position.z = 20;
-camera.position.y = 10;
+camera.position.z = 26;
+camera.position.y = 8;
 
 
 const renderer = new THREE.WebGLRenderer({
@@ -53,10 +53,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
 
-const gui = new GUI({
-    width: 300,
-});
-scene.add(gui);
+// const gui = new GUI({
+//     width: 300,
+// });
+// scene.add(gui);
 
 // gui.add(sun.position, 'y').min(-10).max(10).step(0.01);
 // gui.open();
@@ -239,7 +239,7 @@ scene.add(bulbLight);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
-renderer.render(scene, camera, gui);
+renderer.render(scene, camera);
 
 // camera.getWorldPosition.setZ(30);
 
@@ -417,6 +417,32 @@ const mars = new THREE.Mesh(
 );
 mars.position.x = 3;
 
+const meteorGeometry = new THREE.SphereGeometry(0.2, 16, 8);
+const meteorLight = new THREE.PointLight(0xffee88, 7, 20, 20);
+const meteorMat = new THREE.MeshStandardMaterial({
+    emissive: 0xffffee,
+    emissiveIntensity: 4,
+    color: 0x000000,
+});
+meteorLight.add(new THREE.Mesh(meteorGeometry, meteorMat));
+meteorLight.position.set(0, 2, 0);
+meteorLight.castShadow = true;
+// meteorLight.castShadow = false;
+// sun.add(meteorLight);
+
+
+
+const shootingStar = new THREE.Mesh(
+    new THREE.SphereGeometry(0.35, 64, 64),
+    new THREE.MeshLambertMaterial({
+        map: moonTexture,
+        // normalMap: moonTexture,
+    }),
+);
+// shootingStar.position.x = 3;
+// sun.add(shootingStar);
+
+
 
 const sun = new THREE.Mesh(
     new THREE.SphereGeometry(2, 40, 40),
@@ -429,8 +455,11 @@ const sun = new THREE.Mesh(
         // emissive: 0xffffff,
     }),
 );
-sun.add(earth, mercury, venus, mars);
-scene.add(sun);
+sun.add(earth, mercury, venus, mars, shootingStar);
+scene.add(sun, meteorLight);
+
+
+
 
 
 const clock = new THREE.Clock();
@@ -480,10 +509,23 @@ const tick = () => {
     mars.position.x = Math.cos(-(elapsedTime) * 0.02) * 22;
     
     mars.rotation.y += 0.06;
+
+
+    meteorLight.position.z -= Math.sin(elapsedTime * 0.01) * 9;
+    meteorLight.position.x -= Math.cos(elapsedTime * 0.01) * 9;
+
+
+    // shootingStar.position.z = -Math.sin(-elapsedTime * 2) * 120;
+    shootingStar.position.x = Math.tan(elapsedTime * 3) * 120;
+    shootingStar.position.z = -Math.sin(elapsedTime * 6 + 4) * 120;
+    shootingStar.position.y = Math.cos(elapsedTime * 0.5) * 39;
+
     // moon.position.x = Math.sin(elapsedTime * 2) * 3.5;
     // moon.position.z = Math.cos(elapsedTime * 5) * 3.5;
     moon.rotation.y = elapsedTime * 0.5;
     sun.rotation.y += 0.02;
+
+    
 
     // SUN LEAPS OUT AT YOU!!
     // sun.position.y = Math.sin(elapsedTime) * 2;
@@ -505,9 +547,9 @@ material.roughness = 0.2;
 
 
 
-gui.add(material, 'metalness').min(0).max(1).step(0.0001);
-gui.add(material, 'roughness').min(0).max(1).step(0.0001);
-gui.add(material.wireframe, 'true');
+// gui.add(material, 'metalness').min(0).max(1).step(0.0001);
+// gui.add(material, 'roughness').min(0).max(1).step(0.0001);
+// gui.add(material.wireframe, 'true');
 
 
 const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -523,37 +565,37 @@ const environmentMapTexture = cubeTextureLoader.load(
 
 material.envMap = environmentMapTexture;
 
-const orbitRing = new THREE.Mesh(
-    new THREE.RingGeometry(2, 2, 50, 50, Math.PI * 2, Math.PI * 2),
-    new THREE.MeshStandardMaterial({
-        color: 0xffffff,
+// const orbitRing = new THREE.Mesh(
+//     new THREE.RingGeometry(2, 2, 50, 50, Math.PI * 2, Math.PI * 2),
+//     new THREE.MeshStandardMaterial({
+//         color: 0xffffff,
 
-    }),
-);
-orbitRing.rotation.z = Math.PI / 2;
-scene.add(orbitRing);
-
-
-const params = {
-    color: 0xfff000,
-    spin: () => {
-        sun.rotation, {
-            duration: 1,
-            y: sun.rotation.y += Math.PI * 2
-        };
-    }
-};
+//     }),
+// );
+// orbitRing.rotation.z = Math.PI / 2;
+// scene.add(orbitRing);
 
 
-gui
-    .add(params, 'spin');
+// const params = {
+//     color: 0xfff000,
+//     spin: () => {
+//         sun.rotation, {
+//             duration: 1,
+//             y: sun.rotation.y += Math.PI * 2
+//         };
+//     }
+// };
 
-gui
-    .add(sun.rotation, 'y')
-    .min(-30)
-    .max(30)
-    .step(0.1)
-    .name('rotation');
+
+// gui
+//     .add(params, 'spin');
+
+// gui
+//     .add(sun.rotation, 'y')
+//     .min(-30)
+//     .max(30)
+//     .step(0.1)
+//     .name('rotation');
 
 // gui
 //     .add(sun, 'visible');
