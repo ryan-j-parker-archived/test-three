@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D text environment</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+    <link rel="stylesheet" href="./styles/global.css" />
+
+</head>
+<body>
+    <canvas id="text-scene"></canvas>
+        <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+            {
+                "imports": {
+					"three": "../build/three.module.js",
+					"three/addons/": "./jsm/"
+                }
+            }
+        </script>
+    <!-- <script type="module" src="./minified/gsap.min.js"></script> -->
+<script type="text/javascript" src="libs/dat.gui.js"></script>
+    <script type="module" src="./build/three.min.js"></script>
+    
+    <script type="module" src="./solarSystem.js"></script>
+
+
+    <main class="main-body">
+        <div class="container">
+            <a href="./text.html"><button type="button" class="btn" id="text-btn">Go to 3D text</button></a>
+        </div>
+    </main>
+
+</body>
+</html>

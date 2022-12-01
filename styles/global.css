@@ -40,6 +40,30 @@ main {
     padding: 20px;
 }
 
+.btn {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: auto;
+    width: auto;
+    font-size: 3rem;
+    border-radius: 10px;
+    color: white;
+    background-color: blue;
+    z-index: 9;
+    /* visibility: hidden; */
+}
+
+.btn:hover {
+    /* visibility: visible; */
+    cursor: pointer;
+}
+
+.btn:active {
+    scale: 0.95;
+    opacity: 0.9;
+}
+
 /* .main-body {
     background: url('../assets/stars.jpg') no-repeat center center fixed;
     background-size: cover;
